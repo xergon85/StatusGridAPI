@@ -2,6 +2,19 @@ using StatusGridAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Cors
+var localOrigin = "my-local-origin";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: localOrigin,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:4200")
+                                 .AllowAnyHeader()
+                                 .AllowAnyMethod();
+                      });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -18,6 +31,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(localOrigin);
 
 app.UseHttpsRedirection();
 
