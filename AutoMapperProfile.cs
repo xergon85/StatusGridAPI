@@ -1,0 +1,24 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using StatusGridAPI.DTOs;
+using StatusGridAPI.Models;
+
+namespace StatusGridAPI
+{
+    public class AutoMapperProfile : Profile
+    {
+        public AutoMapperProfile()
+        {
+            // CreateMap<Source, Destination>();
+            CreateMap<GridConfiguration, GetAllGridConfigurationsDTO>();
+            // CreateMap<GridConfiguration, GetGridConfigurationDTO>();
+            CreateMap<AddGridConfigurationDTO, GridConfiguration>();
+            CreateMap<AddStatusDTO, Status>();
+            CreateMap<Status, AddStatusDTO>();
+
+        }
+    }
+}
