@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using StatusGridAPI.Data;
 using StatusGridAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +24,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IGridConfigurationService, GridConfigurationService>();
+builder.Services.AddDbContext<DataContext>();
 
 var app = builder.Build();
 
