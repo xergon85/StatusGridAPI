@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using StatusGridAPI.DTOs;
 using StatusGridAPI.Models;
 using StatusGridAPI.Services;
 
@@ -37,16 +38,16 @@ namespace StatusGridAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveGridConfiguration(GridConfiguration gridConfiguration)
+        public IActionResult SaveGridConfiguration(AddGridConfigurationDTO gridConfiguration)
         {
             _gridConfigurationService.SaveConfiguration(gridConfiguration);
             return Ok(gridConfiguration);
         }
 
         [HttpDelete("{name}")]
-        public IActionResult DeleteGridConfiguration(string name)
+        public async Task<IActionResult> DeleteGridConfiguration(string name)
         {
-            var gridConfiguration = _gridConfigurationService.GetGridConfiguration(name);
+            var gridConfiguration = await _gridConfigurationService.GetGridConfiguration(name);
             if (gridConfiguration == null)
             {
                 return NotFound();

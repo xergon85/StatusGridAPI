@@ -1,12 +1,13 @@
+using StatusGridAPI.DTOs;
 using StatusGridAPI.Models;
 
 namespace StatusGridAPI.Services
 {
     public interface IGridConfigurationService
     {
-        GridConfiguration? GetGridConfiguration(string name);
-        List<GridConfiguration> GetAllConfigurations();
-        void SaveConfiguration(GridConfiguration gridConfiguration);
+        Task<GridConfiguration> GetGridConfiguration(string name);
+        Task<List<GridConfiguration>> GetAllConfigurations();
+        void SaveConfiguration(AddGridConfigurationDTO gridConfiguration);
         void RemoveConfiguration(GridConfiguration gridConfiguration);
     }
 }

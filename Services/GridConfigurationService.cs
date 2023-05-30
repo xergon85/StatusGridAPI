@@ -2,68 +2,71 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using StatusGridAPI.Data;
+using StatusGridAPI.DTOs;
 using StatusGridAPI.Models;
 
 namespace StatusGridAPI.Services
 {
     public class GridConfigurationService : IGridConfigurationService
     {
-        private static List<GridConfiguration> _gridConfigurations = new List<GridConfiguration> {
-            new GridConfiguration {
-                Name = "Default",
-                Id = 1,
-                Statuses = new List<Status> {
-                    new Status { Id = 1, X = 0, Y = 0, statusCode = StatusCode.Untouched, GridConfigurationId = 1 },
-                    new Status { Id = 2, X = 0, Y = 1, statusCode = StatusCode.Untouched, GridConfigurationId = 1 },
-                    new Status { Id = 3, X = 1, Y = 0, statusCode = StatusCode.Untouched, GridConfigurationId = 1 },
-                    new Status { Id = 4, X = 1, Y = 1, statusCode = StatusCode.Untouched, GridConfigurationId = 1 }
-                }
-            }
-        };
 
+        private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
 
-
-        // public GridConfigurationService()
-        // {
-
-        //     var gridConfig = new GridConfiguration { Name = "Default", Id = 1 };
-        //     var statuses = new List<Status>();
-        //     statuses.Add(new Status { Id = 1, X = 0, Y = 0, statusCode = StatusCode.Untouched, GridConfigurationId = 1 });
-        //     statuses.Add(new Status { Id = 2, X = 0, Y = 1, statusCode = StatusCode.Untouched, GridConfigurationId = 1 });
-        //     statuses.Add(new Status { Id = 3, X = 1, Y = 0, statusCode = StatusCode.Untouched, GridConfigurationId = 1 });
-        //     statuses.Add(new Status { Id = 4, X = 1, Y = 1, statusCode = StatusCode.Untouched, GridConfigurationId = 1 });
-        //     gridConfig.Statuses = statuses;
-
-        //     _gridConfigurations.Add(gridConfig);
-        // }
-
-
-        public GridConfiguration? GetGridConfiguration(string name)
+        public GridConfigurationService(DataContext dataContext, IMapper mapper)
         {
-            return _gridConfigurations.FirstOrDefault(gc => gc.Name == name);
+            _mapper = mapper;
+            _dataContext = dataContext;
         }
 
-        public List<GridConfiguration> GetAllConfigurations()
+        public async Task<GridConfiguration> GetGridConfiguration(string name)
         {
-            return _gridConfigurations;
+            var gridConfigurations = await _dataContext.GridConfigurations
+                .Include(gc => gc.Statuses)
+                .ToListAsync();
+            var gridConfiguration = gridConfigurations.FirstOrDefault(gc => gc.Name == name);
+
+            return gridConfiguration;
         }
 
-        public void SaveConfiguration(GridConfiguration gridConfiguration)
+        public async Task<List<GridConfiguration>> GetAllConfigurations()
         {
-            var existingGridConfiguration = _gridConfigurations.FirstOrDefault(gc => gc.Name == gridConfiguration.Name);
+            var gridConfigurations = await _dataContext.GridConfigurations
+                .ToListAsync();
+
+            // Create a response and return that?
+            return gridConfigurations;
+
+        }
+
+        public async void SaveConfiguration(AddGridConfigurationDTO gridConfiguration)
+        {
+            var gridConfigurations = await _dataContext.GridConfigurations.ToListAsync();
+            var existingGridConfiguration = gridConfigurations.FirstOrDefault(gc => gc.Name == gridConfiguration.Name);
+
             if (existingGridConfiguration != null)
             {
-                _gridConfigurations.Remove(existingGridConfiguration);
+                _dataContext.Remove(existingGridConfiguration);
             }
-            _gridConfigurations.Add(gridConfiguration);
+
+            var config = _mapper.Map<GridConfiguration>(gridConfiguration);
+            _dataContext.Add(config);
+
+            await _dataContext.SaveChangesAsync();
         }
 
-        public void RemoveConfiguration(GridConfiguration gridConfiguration)
+        public async void RemoveConfiguration(GridConfiguration gridConfiguration)
         {
-            var existing = _gridConfigurations.FirstOrDefault(gc => gc.Name == gridConfiguration.Name);
-            if (existing != null)
+            var gridConfigurations = await _dataContext.GridConfigurations.ToListAsync();
+            var existingGridConfiguration = gridConfigurations.FirstOrDefault(gc => gc.Name == gridConfiguration.Name);
+
+            if (existingGridConfiguration != null)
             {
-                _gridConfigurations.Remove(existing);
+                _dataContext.Remove(existingGridConfiguration);
+                await _dataContext.SaveChangesAsync();
             }
         }
     }
