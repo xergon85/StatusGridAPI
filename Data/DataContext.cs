@@ -11,9 +11,17 @@ namespace StatusGridAPI.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<GridConfiguration> GridConfigurations => Set<GridConfiguration>();
-        public DbSet<Status> Statuses => Set<Status>();
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlite("Data Source=StatusGrid.db");
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GridConfiguration>()
+                .HasMany(p => p.Statuses)
+                .WithOne(p => p.GridConfiguration);
+        }
+
+        public DbSet<GridConfiguration> GridConfigurations { get; set; }
+        public DbSet<Status> Statuses { get; set; }
+
     }
 }
