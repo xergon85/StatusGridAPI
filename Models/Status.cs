@@ -12,5 +12,6 @@ namespace StatusGridAPI.Models
         public int Y { get; set; }
         public StatusCode statusCode { get; set; }
         public int GridConfigurationId { get; set; }
+        public GridConfiguration GridConfiguration { get; set; }
     }
 }
