@@ -479,3 +479,5 @@ $RECYCLE.BIN/
 # VS Code files
 .vscode/*
 *.db
+StatusGrid.db-shm
+StatusGrid.db-wal
