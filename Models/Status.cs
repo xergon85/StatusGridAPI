@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace StatusGridAPI.Models
 {
@@ -12,6 +14,6 @@ namespace StatusGridAPI.Models
         public int Y { get; set; }
         public StatusCode statusCode { get; set; }
         public int GridConfigurationId { get; set; }
-        public GridConfiguration GridConfiguration { get; set; }
+
     }
 }

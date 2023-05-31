@@ -16,8 +16,7 @@ namespace StatusGridAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GridConfiguration>()
-                .HasMany(p => p.Statuses)
-                .WithOne(p => p.GridConfiguration);
+                .HasMany(p => p.Statuses);
         }
 
         public DbSet<GridConfiguration> GridConfigurations { get; set; }
