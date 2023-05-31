@@ -5,9 +5,9 @@ namespace StatusGridAPI.Services
 {
     public interface IGridConfigurationService
     {
-        Task<GridConfiguration> GetGridConfiguration(string name);
-        Task<List<GridConfiguration>> GetAllConfigurations();
-        void SaveConfiguration(AddGridConfigurationDTO gridConfiguration);
-        void RemoveConfiguration(GridConfiguration gridConfiguration);
+        Task<GetGridConfigurationDTO> GetGridConfiguration(string name);
+        Task<List<GetAllGridConfigurationsDTO>> GetAllConfigurations();
+        void CreateConfiguration(CreateGridConfigurationDTO gridConfiguration);
+        void RemoveConfiguration(string name);
     }
 }

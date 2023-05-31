@@ -22,27 +22,36 @@ namespace StatusGridAPI.Services
             _dataContext = dataContext;
         }
 
-        public async Task<GridConfiguration> GetGridConfiguration(string name)
+        public async Task<GetGridConfigurationDTO> GetGridConfiguration(string name)
         {
             var gridConfigurations = await _dataContext.GridConfigurations
                 .Include(gc => gc.Statuses)
                 .ToListAsync();
             var gridConfiguration = gridConfigurations.FirstOrDefault(gc => gc.Name == name);
 
-            return gridConfiguration;
+            if (gridConfiguration == null)
+            {
+                throw new Exception("Grid configuration not found");
+            }
+
+            var grid = _mapper.Map<GetGridConfigurationDTO>(gridConfiguration);
+
+            return grid;
         }
 
-        public async Task<List<GridConfiguration>> GetAllConfigurations()
+        public async Task<List<GetAllGridConfigurationsDTO>> GetAllConfigurations()
         {
             var gridConfigurations = await _dataContext.GridConfigurations
                 .ToListAsync();
 
+            var gridConfigurationsDTO = _mapper.Map<List<GetAllGridConfigurationsDTO>>(gridConfigurations);
+
             // Create a response and return that?
-            return gridConfigurations;
+            return gridConfigurationsDTO;
 
         }
 
-        public async void SaveConfiguration(AddGridConfigurationDTO gridConfiguration)
+        public async void CreateConfiguration(CreateGridConfigurationDTO gridConfiguration)
         {
             var gridConfigurations = await _dataContext.GridConfigurations.ToListAsync();
             var existingGridConfiguration = gridConfigurations.FirstOrDefault(gc => gc.Name == gridConfiguration.Name);
@@ -58,10 +67,10 @@ namespace StatusGridAPI.Services
             await _dataContext.SaveChangesAsync();
         }
 
-        public async void RemoveConfiguration(GridConfiguration gridConfiguration)
+        public async void RemoveConfiguration(string name)
         {
             var gridConfigurations = await _dataContext.GridConfigurations.ToListAsync();
-            var existingGridConfiguration = gridConfigurations.FirstOrDefault(gc => gc.Name == gridConfiguration.Name);
+            var existingGridConfiguration = gridConfigurations.FirstOrDefault(gc => gc.Name == name);
 
             if (existingGridConfiguration != null)
             {

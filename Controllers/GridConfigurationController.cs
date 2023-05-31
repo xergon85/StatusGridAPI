@@ -38,21 +38,17 @@ namespace StatusGridAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveGridConfiguration(AddGridConfigurationDTO gridConfiguration)
+        public IActionResult SaveGridConfiguration(CreateGridConfigurationDTO gridConfiguration)
         {
-            _gridConfigurationService.SaveConfiguration(gridConfiguration);
+            _gridConfigurationService.CreateConfiguration(gridConfiguration);
             return Ok(gridConfiguration);
         }
 
         [HttpDelete("{name}")]
-        public async Task<IActionResult> DeleteGridConfiguration(string name)
+        public IActionResult DeleteGridConfiguration(string name)
         {
-            var gridConfiguration = await _gridConfigurationService.GetGridConfiguration(name);
-            if (gridConfiguration == null)
-            {
-                return NotFound();
-            }
-            _gridConfigurationService.RemoveConfiguration(gridConfiguration);
+
+            _gridConfigurationService.RemoveConfiguration(name);
             return Ok();
         }
 
