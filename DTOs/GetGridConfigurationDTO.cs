@@ -6,9 +6,10 @@ using StatusGridAPI.Models;
 
 namespace StatusGridAPI.DTOs
 {
-    public class AddGridConfigurationDTO
+    public class GetGridConfigurationDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; } = "";
-        public ICollection<AddStatusDTO> Statuses { get; set; }
+        public ICollection<GetStatusDTO> Statuses { get; set; }
     }
 }

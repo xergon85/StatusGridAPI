@@ -14,11 +14,11 @@ namespace StatusGridAPI
         {
             // CreateMap<Source, Destination>();
             CreateMap<GridConfiguration, GetAllGridConfigurationsDTO>();
-            // CreateMap<GridConfiguration, GetGridConfigurationDTO>();
-            CreateMap<AddGridConfigurationDTO, GridConfiguration>();
-            CreateMap<AddStatusDTO, Status>();
-            CreateMap<Status, AddStatusDTO>();
-
+            CreateMap<GridConfiguration, GetGridConfigurationDTO>();
+            CreateMap<CreateGridConfigurationDTO, GridConfiguration>();
+            CreateMap<CreateStatusDTO, Status>();
+            CreateMap<Status, CreateStatusDTO>();
+            CreateMap<Status, GetStatusDTO>();
         }
     }
 }

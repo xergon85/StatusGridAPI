@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using StatusGridAPI.Models;
 
 namespace StatusGridAPI.DTOs
 {
-    public class GetAllGridConfigurationsDTO
+    public class CreateGridConfigurationDTO
     {
-        public int Id { get; set; }
         public string Name { get; set; } = "";
+        public ICollection<CreateStatusDTO> Statuses { get; set; }
     }
 }
