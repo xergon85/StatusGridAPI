@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using StatusGridAPI.DTOs;
-using StatusGridAPI.Models;
+using StatusGridAPI.Response;
 using StatusGridAPI.Services;
 
 namespace StatusGridAPI.Controllers
@@ -21,36 +17,59 @@ namespace StatusGridAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetGridConfigurations()
+        public async Task<ActionResult<ServiceResponse<List<GetAllGridConfigurationsDTO>>>> GetGridConfigurations()
         {
-            return Ok(_gridConfigurationService.GetAllConfigurations());
+            var response = await _gridConfigurationService.GetAllConfigurations();
+            return Ok(response);
         }
 
         [HttpGet("{name}")]
-        public IActionResult GetGridConfiguration(string name)
+        public async Task<ActionResult<ServiceResponse<GetGridConfigurationDTO>>> GetGridConfiguration(string name)
         {
-            var gridConfiguration = _gridConfigurationService.GetGridConfiguration(name);
-            if (gridConfiguration == null)
+            var response = await _gridConfigurationService.GetGridConfiguration(name);
+            if (response.Success == false)
             {
-                return NotFound();
+                return NotFound(response);
             }
-            return Ok(gridConfiguration);
+            return Ok(response);
         }
 
         [HttpPost]
-        public IActionResult SaveGridConfiguration(CreateGridConfigurationDTO gridConfiguration)
+        public async Task<ActionResult<ServiceResponse<List<GetAllGridConfigurationsDTO>>>> CreateGridConfiguration(CreateGridConfigurationDTO gridConfiguration)
         {
-            _gridConfigurationService.CreateConfiguration(gridConfiguration);
-            return Ok(gridConfiguration);
+            var response = await _gridConfigurationService.CreateConfiguration(gridConfiguration);
+
+            if (response.Success == false)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPut("{name}")]
+        public async Task<ActionResult<ServiceResponse<List<GetAllGridConfigurationsDTO>>>> UpdateGridConfiguration(string name, UpdateGridConfigurationDTO gridConfiguration)
+        {
+            var response = await _gridConfigurationService.UpdateConfiguration(name, gridConfiguration);
+
+            if (response.Success == false)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
         }
 
         [HttpDelete("{name}")]
-        public IActionResult DeleteGridConfiguration(string name)
+        public async Task<ActionResult<ServiceResponse<List<GetAllGridConfigurationsDTO>>>> DeleteGridConfiguration(string name)
         {
 
-            _gridConfigurationService.RemoveConfiguration(name);
-            return Ok();
+            var response = await _gridConfigurationService.RemoveConfiguration(name);
+            if (response.Success == false)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
-
     }
 }
