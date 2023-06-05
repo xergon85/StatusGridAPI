@@ -47,19 +47,6 @@ namespace StatusGridAPI.Controllers
             return Ok(response);
         }
 
-        [HttpPut("{name}")]
-        public async Task<ActionResult<ServiceResponse<List<GetAllGridConfigurationsDTO>>>> UpdateGridConfiguration(string name, UpdateGridConfigurationDTO gridConfiguration)
-        {
-            var response = await _gridConfigurationService.UpdateConfiguration(name, gridConfiguration);
-
-            if (response.Success == false)
-            {
-                return NotFound(response);
-            }
-
-            return Ok(response);
-        }
-
         [HttpDelete("{name}")]
         public async Task<ActionResult<ServiceResponse<List<GetAllGridConfigurationsDTO>>>> DeleteGridConfiguration(string name)
         {

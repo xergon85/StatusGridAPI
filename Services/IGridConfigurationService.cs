@@ -9,6 +9,5 @@ namespace StatusGridAPI.Services
         Task<ServiceResponse<List<GetAllGridConfigurationsDTO>>> GetAllConfigurations();
         Task<ServiceResponse<List<GetAllGridConfigurationsDTO>>> CreateConfiguration(CreateGridConfigurationDTO gridConfiguration);
         Task<ServiceResponse<List<GetAllGridConfigurationsDTO>>> RemoveConfiguration(string name);
-        Task<ServiceResponse<GetGridConfigurationDTO>> UpdateConfiguration(string name, UpdateGridConfigurationDTO gridConfiguration);
     }
 }

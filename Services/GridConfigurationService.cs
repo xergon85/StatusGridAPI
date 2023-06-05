@@ -54,9 +54,8 @@ namespace StatusGridAPI.Services
 
             if (existingGridConfiguration != null)
             {
-                response.Success = false;
-                response.Message = "Grid configuration already exists";
-                return response;
+                _dataContext.Remove(existingGridConfiguration);
+                await _dataContext.SaveChangesAsync();
             }
 
             var config = _mapper.Map<GridConfiguration>(gridConfiguration);
@@ -85,37 +84,6 @@ namespace StatusGridAPI.Services
 
             response.Success = false;
             response.Message = "Grid configuration not found";
-            return response;
-        }
-
-        public async Task<ServiceResponse<GetGridConfigurationDTO>> UpdateConfiguration(string name, UpdateGridConfigurationDTO gridConfiguration)
-        {
-            var response = new ServiceResponse<GetGridConfigurationDTO>();
-            var gridConfigurations = await _dataContext.GridConfigurations.ToListAsync();
-            var existingGridConfiguration = gridConfigurations.FirstOrDefault(gc => gc.Name == name);
-
-            if (existingGridConfiguration == null)
-            {
-                response.Success = false;
-                response.Message = "Grid configuration not found";
-                return response;
-            }
-
-            existingGridConfiguration.Name = gridConfiguration.Name;
-            existingGridConfiguration.Statuses = _mapper.Map<List<Status>>(gridConfiguration.Statuses);
-
-            // TODO: Fix the update to update the statuses not add new ones
-
-
-
-
-
-            _dataContext.Update(existingGridConfiguration);
-
-            await _dataContext.SaveChangesAsync();
-
-            response.Data = _mapper.Map<GetGridConfigurationDTO>(existingGridConfiguration);
-
             return response;
         }
 
