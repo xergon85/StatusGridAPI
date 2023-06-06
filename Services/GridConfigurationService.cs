@@ -49,6 +49,15 @@ namespace StatusGridAPI.Services
         public async Task<ServiceResponse<List<GetAllGridConfigurationsDTO>>> CreateConfiguration(CreateGridConfigurationDTO gridConfiguration)
         {
             var response = new ServiceResponse<List<GetAllGridConfigurationsDTO>>();
+
+            if (gridConfiguration.Name == null || gridConfiguration.Name == "")
+            {
+                response = new ServiceResponse<List<GetAllGridConfigurationsDTO>>();
+                response.Success = false;
+                response.Message = "Name cannot be null or empty";
+                return response;
+            }
+
             var gridConfigurations = await _dataContext.GridConfigurations.ToListAsync();
             var existingGridConfiguration = gridConfigurations.FirstOrDefault(gc => gc.Name == gridConfiguration.Name);
 
