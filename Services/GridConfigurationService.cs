@@ -98,8 +98,7 @@ namespace StatusGridAPI.Services
 
         private async Task<List<GetAllGridConfigurationsDTO>> FetchAllConfigurations()
         {
-            var gridConfigurations = await _dataContext.GridConfigurations
-                .ToListAsync();
+            var gridConfigurations = await _dataContext.GridConfigurations.OrderBy(gc => gc.Name).ToListAsync();
 
             return _mapper.Map<List<GetAllGridConfigurationsDTO>>(gridConfigurations);
         }
