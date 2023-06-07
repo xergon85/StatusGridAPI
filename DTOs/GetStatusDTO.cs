@@ -7,6 +7,6 @@ namespace StatusGridAPI.DTOs
         public int Id { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public StatusCode statusCode { get; set; }
+        public StatusCode StatusCode { get; set; }
     }
 }

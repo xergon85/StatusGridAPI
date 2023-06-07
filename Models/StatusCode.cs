@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace StatusGridAPI.Models
 {
     public enum StatusCode
